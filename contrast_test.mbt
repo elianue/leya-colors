@@ -4,6 +4,28 @@ fn near(a : Double, b : Double) -> Bool {
 }
 
 ///|
+test "adjacent 8-bit grays straddle each WCAG text threshold" {
+  let white = @colors.rgb(255, 255, 255).unwrap()
+  // Independent sRGB fixtures; ratios are never rounded before comparison.
+  for
+    (pass_gray, fail_gray, level, size, threshold) in [
+      (148, 149, @colors.AA, @colors.Large, 3.0),
+      (118, 119, @colors.AA, @colors.Normal, 4.5),
+      (118, 119, @colors.AAA, @colors.Large, 4.5),
+      (89, 90, @colors.AAA, @colors.Normal, 7.0),
+    ] {
+    let pass = @colors.rgb(pass_gray, pass_gray, pass_gray).unwrap()
+    let fail = @colors.rgb(fail_gray, fail_gray, fail_gray).unwrap()
+    assert_true(@colors.contrast_ratio(pass, white) > threshold)
+    assert_true(@colors.contrast_ratio(fail, white) < threshold)
+    assert_true(@colors.passes_contrast(pass, white, level, size))
+    assert_true(@colors.passes_contrast(white, pass, level, size))
+    assert_false(@colors.passes_contrast(fail, white, level, size))
+    assert_false(@colors.passes_contrast(white, fail, level, size))
+  }
+}
+
+///|
 test "WCAG luminance endpoints and primary weights" {
   assert_true(near(@colors.rgb(0, 0, 0).unwrap().relative_luminance(), 0.0))
   assert_true(

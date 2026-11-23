@@ -60,5 +60,13 @@ pub fn passes_contrast(
   level : Level,
   size : TextSize,
 ) -> Bool {
-  contrast_ratio(a, b) >= required_contrast(level, size)
+  ratio_passes(contrast_ratio(a, b), level, size)
+}
+
+// Keep the inclusive comparison separately testable at exact thresholds:
+// opaque 8-bit RGB cannot represent arbitrary luminance values exactly.
+
+///|
+fn ratio_passes(ratio : Double, level : Level, size : TextSize) -> Bool {
+  ratio >= required_contrast(level, size)
 }
