@@ -1,3 +1,7 @@
 import {
-  "moonbitlang/core/math",
+  "moonbitlang/core/cmp",
 }
+
+import {
+  "elianue/leya-colors" @colors,
+} for "test"
