@@ -4,6 +4,22 @@ fn close(a : Double, b : Double) -> Bool {
 }
 
 ///|
+test "HSL outputs can always be reconstructed with the validating constructor" {
+  for r in [0, 1, 2, 10, 11, 127, 128, 253, 254, 255] {
+    for g in [0, 1, 2, 10, 11, 127, 128, 253, 254, 255] {
+      for b in [0, 1, 2, 10, 11, 127, 128, 253, 254, 255] {
+        let color = @colors.rgb(r, g, b).unwrap()
+        let (h, s, l) = color.to_hsl().components()
+        assert_true(h >= 0.0 && h < 360.0)
+        assert_true(s >= 0.0 && s <= 100.0)
+        assert_true(l >= 0.0 && l <= 100.0)
+        assert_eq(@colors.hsl(h, s, l).unwrap().to_rgb(), color)
+      }
+    }
+  }
+}
+
+///|
 test "hex accepts short, long, case and optional hash" {
   assert_eq(@colors.from_hex("#aBc"), @colors.rgb(170, 187, 204))
   assert_eq(@colors.from_hex("ABC"), @colors.rgb(170, 187, 204))

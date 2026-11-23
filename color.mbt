@@ -116,22 +116,24 @@ pub fn Rgb::to_hex(self : Rgb) -> String {
 ///|
 /// Convert sRGB to HSL; achromatic hue is zero.
 pub fn Rgb::to_hsl(self : Rgb) -> Hsl {
-  let r = self.red.to_double() / 255.0
-  let g = self.green.to_double() / 255.0
-  let b = self.blue.to_double() / 255.0
+  // Compute extrema and chroma in integer channel units first. Normalizing
+  // first causes cancellation near black/white and can produce S > 100.
+  let r = self.red
+  let g = self.green
+  let b = self.blue
   let hi = @cmp.maximum(r, @cmp.maximum(g, b))
   let lo = @cmp.minimum(r, @cmp.minimum(g, b))
   let d = hi - lo
-  let l = (hi + lo) / 2.0
-  if d == 0.0 {
+  let l = (hi + lo).to_double() / 510.0
+  if d == 0 {
     return { hue: 0.0, saturation: 0.0, lightness: l * 100.0, }
   }
   let mut h = if hi == r {
-    (g - b) / d
+    (g - b).to_double() / d.to_double()
   } else if hi == g {
-    (b - r) / d + 2.0
+    (b - r).to_double() / d.to_double() + 2.0
   } else {
-    (r - g) / d + 4.0
+    (r - g).to_double() / d.to_double() + 4.0
   }
   h = h * 60.0
   if h < 0.0 {
@@ -139,7 +141,9 @@ pub fn Rgb::to_hsl(self : Rgb) -> Hsl {
   }
   {
     hue: h,
-    saturation: d / (1.0 - (2.0 * l - 1.0).abs()) * 100.0,
+    saturation: d.to_double() /
+    (255 - (hi + lo - 255).abs()).to_double() *
+    100.0,
     lightness: l * 100.0,
   }
 }
