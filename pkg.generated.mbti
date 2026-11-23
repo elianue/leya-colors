@@ -1,0 +1,64 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "elianue/leya-colors"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn contrast_ratio(Rgb, Rgb) -> Double
+
+pub fn from_hex(String) -> Result[Rgb, ColorError]
+
+pub fn hex_to_hsl(String) -> Result[Hsl, ColorError]
+
+pub fn hsl(Double, Double, Double) -> Result[Hsl, ColorError]
+
+pub fn passes_contrast(Rgb, Rgb, Level, TextSize) -> Bool
+
+pub fn required_contrast(Level, TextSize) -> Double
+
+pub fn rgb(Int32, Int32, Int32) -> Result[Rgb, ColorError]
+
+// Errors
+
+// Types and methods
+#derive(Eq, @debug.Debug)
+pub(all) enum ColorError {
+  InvalidRgb
+  InvalidHsl
+  InvalidHex
+}
+
+#derive(Eq, @debug.Debug)
+pub struct Hsl {
+  // private fields
+}
+pub fn Hsl::components(Self) -> (Double, Double, Double)
+pub fn Hsl::to_hex(Self) -> String
+pub fn Hsl::to_rgb(Self) -> Rgb
+
+#derive(Eq, @debug.Debug)
+pub(all) enum Level {
+  AA
+  AAA
+}
+
+#derive(Eq, @debug.Debug)
+pub struct Rgb {
+  // private fields
+}
+pub fn Rgb::channels(Self) -> (Int32, Int32, Int32)
+pub fn Rgb::relative_luminance(Self) -> Double
+pub fn Rgb::to_hex(Self) -> String
+pub fn Rgb::to_hsl(Self) -> Hsl
+
+#derive(Eq, @debug.Debug)
+pub(all) enum TextSize {
+  Normal
+  Large
+}
+
+// Type aliases
+
+// Traits
