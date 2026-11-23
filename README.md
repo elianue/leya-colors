@@ -65,6 +65,17 @@ match @colors.from_hex(user_input) {
 
 See [cmd/main/main.mbt](cmd/main/main.mbt) for a complete runnable example.
 
+A separate consuming module is included in [examples/consumer](examples/consumer). It imports the public package through `moon.work`, checks design tokens, and handles malformed input without panicking:
+
+```sh
+cd examples/consumer
+moon check
+moon test
+moon run .
+```
+
+The workspace test command runs both the library and consumer tests. The output includes a passing `#336699` token, a failing `#777777` token, and a handled invalid input. Return to the repository root before running the library-only commands below. This example is excluded from the library publication archive.
+
 ## API and validation
 
 | API | Behavior |
