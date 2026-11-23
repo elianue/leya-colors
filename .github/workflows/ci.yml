@@ -1,0 +1,42 @@
+name: MoonBit CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+      - uses: moonbit-community/setup-moonbit@04293a8a813bfd4b6c2fce22701b52ae1050d100
+        with:
+          version: latest
+      - name: Record toolchain
+        run: moon version --all
+      - run: moon fmt --check
+      - run: moon check
+      - run: moon test
+      - run: moon test --target js
+      - run: moon build
+      - run: moon run cmd/main
+      - name: Consumer formatting
+        working-directory: examples/consumer
+        run: moon fmt --check
+      - name: Consumer integration tests
+        working-directory: examples/consumer
+        run: moon test
+      - name: Consumer example
+        working-directory: examples/consumer
+        run: moon run .

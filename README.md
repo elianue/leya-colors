@@ -1,5 +1,7 @@
 # Leya Colors
 
+[![MoonBit CI](https://github.com/elianue/leya-colors/actions/workflows/ci.yml/badge.svg)](https://github.com/elianue/leya-colors/actions/workflows/ci.yml)
+
 A lightweight color utility library written in **MoonBit**: validated opaque sRGB colors, HEX/RGB/HSL conversion, relative luminance, and WCAG text contrast checks. No third-party dependencies beyond MoonBit core.
 
 Working MVP, version 0.1.0. Created and maintained by Leya (`elianue`), with AI-assisted development. The original planning README is preserved in [docs/README.original.md](docs/README.original.md).
@@ -118,7 +120,9 @@ moon run cmd/main
 moon info
 ```
 
-Tests cover standard colors, malformed strings, non-finite values, all six HSL sectors, grayscale, numerical fixtures, 1,000 RGB/HSL/HEX round trips and contrast invariants over all 256 gray levels. See [development results](docs/DEVELOPMENT.md).
+The library currently has **17 tests** per backend. Tests cover standard colors, malformed strings, non-finite values, all six HSL sectors, grayscale, numerical fixtures, 1,000 RGB/HSL/HEX round trips, another 1,000-color validation grid, and contrast invariants over all 256 gray levels. WCAG tests cover adjacent 8-bit grays on both sides of 3, 4.5 and 7, plus exact inclusive thresholds and epsilon neighbors. The separate consumer adds 2 integration tests (19 in its workspace). See [development results](docs/DEVELOPMENT.md).
+
+GitHub Actions runs formatting, checking, Wasm/JavaScript tests, build, and both runnable examples on Ubuntu and Windows for pushes and pull requests. Third-party actions are pinned to commit hashes. The MoonBit channel is `latest` so the CI log records the actual installed versions; the compiler itself is not pinned, and a future language change can require maintenance. There are no publication credentials or deployment steps in CI.
 
 - `color.mbt`: validated types, parsing and conversions
 - `contrast.mbt`: luminance and text contrast
