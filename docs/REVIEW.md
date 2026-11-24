@@ -33,7 +33,7 @@ The root example now prints HSL `210, 50%, 40%`; its luminance/contrast remain `
 
 ## Remaining limits
 
-No alpha/compositing, CSS named/functional colors, perceptual color spaces, visual UI, performance benchmarks or registry release. Current tests sample conversion round trips rather than exhaustively testing all 16,777,216 RGB colors. HSL-to-RGB deliberately quantizes to 8-bit channels. Native/LLVM backends remain untested. Basic text contrast does not certify overall WCAG compliance. Compared with existing MoonBit color libraries, this project's differentiator is a small validated API and focused regression/integration coverage; a significant ecosystem innovation has not been demonstrated.
+No alpha/compositing, CSS named/functional colors, perceptual color spaces, visual UI or performance benchmarks. Current tests sample conversion round trips rather than exhaustively testing all 16,777,216 RGB colors. HSL-to-RGB deliberately quantizes to 8-bit channels. Native/LLVM backends remain untested. Basic text contrast does not certify overall WCAG compliance. Compared with existing MoonBit color libraries, this project's differentiator is a small validated API and focused regression/integration coverage; a significant ecosystem innovation has not been demonstrated. Registry installation instructions have subsequently been added to the root README.
 
 ## Event requirements and gaps
 

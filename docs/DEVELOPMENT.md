@@ -1,5 +1,7 @@
 # MVP development record
 
+This is the historical initial-MVP record. For subsequent fixes, expanded tests and CI, see [REVIEW.md](REVIEW.md). For current registry installation, see the root README.
+
 ## Implemented
 
 - Pure MoonBit core implementation, opaque validated `Rgb` and `Hsl` types.

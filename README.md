@@ -20,7 +20,27 @@ moon run cmd/main
 
 The runnable example prints `#336699`, RGB `(51, 102, 153)`, HSL approximately `(210, 50, 40)`, luminance `0.1250645743288924`, contrast against white `5.997786839657083`, and AA normal-text result `true`.
 
-The module is not yet published to mooncakes.io. For a local consumer, arrange sibling directories `my-app/` and `leya-colors/`. In `my-app/moon.work`, list both modules:
+## Install from Mooncakes
+
+In an existing MoonBit module, add the released library:
+
+```sh
+moon add elianue/leya-colors@0.1.0
+```
+
+Import the package in the consuming `moon.pkg`:
+
+```moonbit
+import {
+  "elianue/leya-colors" @colors,
+}
+```
+
+Then call the API shown below and run `moon check` or `moon test` to fetch and compile the dependency. Registry module: [elianue/leya-colors](https://mooncakes.io/docs/elianue/leya-colors).
+
+### Develop against a local checkout
+
+For a local consumer, arrange sibling directories `my-app/` and `leya-colors/`. In `my-app/moon.work`, list both modules:
 
 ```moonbit
 members = [ ".", "../leya-colors" ]
@@ -135,7 +155,7 @@ GitHub Actions runs formatting, checking, Wasm/JavaScript tests, build, and both
 
 An independent implementation of standard formulas, not a source-code port. Related projects inspected: [color-convert](https://github.com/Qix-/color-convert), [MoonBit Palette Forge](https://github.com/lkdrt/moonbit-palette-forge), and [office.mbt](https://github.com/moonbitlang/office.mbt). See [research notes](docs/RESEARCH.md).
 
-Alpha blending, CSS color parsing, perceptual color spaces, palette generation, a visual UI and registry publication are outside this MVP. No competition application is included.
+Alpha blending, CSS color parsing, perceptual color spaces, palette generation and a visual UI are outside this MVP. No competition application is included.
 
 ## License
 
