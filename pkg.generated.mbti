@@ -6,19 +6,45 @@ import {
 }
 
 // Values
+pub fn alpha_contrast(Rgba, Rgb) -> Double
+
+pub fn audit_palette(Array[Rgb], Level, TextSize) -> Result[Array[ContrastPair], ColorError]
+
+pub fn best_foreground(Rgb, Array[Rgb]) -> Rgb?
+
+pub fn color_stop(Double, Rgb) -> Result[ColorStop, ColorError]
+
 pub fn contrast_ratio(Rgb, Rgb) -> Double
 
 pub fn from_hex(String) -> Result[Rgb, ColorError]
+
+pub fn from_hex_alpha(String) -> Result[Rgba, ColorError]
+
+pub fn gradient(Rgb, Rgb, Int32, MixSpace) -> Result[Array[Rgb], ColorError]
+
+pub fn gradient_stops(Array[ColorStop], Int32, MixSpace) -> Result[Array[Rgb], ColorError]
 
 pub fn hex_to_hsl(String) -> Result[Hsl, ColorError]
 
 pub fn hsl(Double, Double, Double) -> Result[Hsl, ColorError]
 
+pub fn hsv(Double, Double, Double) -> Result[Hsv, ColorError]
+
+pub fn mix(Rgb, Rgb, Double, MixSpace) -> Result[Rgb, ColorError]
+
 pub fn passes_contrast(Rgb, Rgb, Level, TextSize) -> Bool
+
+pub fn readable_foregrounds(Rgb, Array[Rgb], Level, TextSize) -> Array[Rgb]
 
 pub fn required_contrast(Level, TextSize) -> Double
 
 pub fn rgb(Int32, Int32, Int32) -> Result[Rgb, ColorError]
+
+pub fn rgba(Int32, Int32, Int32, Double) -> Result[Rgba, ColorError]
+
+pub fn sample_stops(Array[ColorStop], Double, MixSpace) -> Result[Rgb, ColorError]
+
+pub fn suggest_foreground(Rgb, Rgb, Level, TextSize) -> Rgb
 
 // Errors
 
@@ -28,6 +54,24 @@ pub(all) enum ColorError {
   InvalidRgb
   InvalidHsl
   InvalidHex
+  InvalidHsv
+  InvalidAlpha
+  InvalidAmount
+  InvalidCount
+}
+
+#derive(Eq, @debug.Debug)
+pub struct ColorStop {
+  // private fields
+}
+pub fn ColorStop::components(Self) -> (Double, Rgb)
+
+#derive(Eq, @debug.Debug)
+pub struct ContrastPair {
+  first : Int32
+  second : Int32
+  ratio : Double
+  passes : Bool
 }
 
 #derive(Eq, @debug.Debug)
@@ -36,7 +80,17 @@ pub struct Hsl {
 }
 pub fn Hsl::components(Self) -> (Double, Double, Double)
 pub fn Hsl::to_hex(Self) -> String
+pub fn Hsl::to_hsv(Self) -> Hsv
 pub fn Hsl::to_rgb(Self) -> Rgb
+
+#derive(Eq, @debug.Debug)
+pub struct Hsv {
+  // private fields
+}
+pub fn Hsv::components(Self) -> (Double, Double, Double)
+pub fn Hsv::to_hex(Self) -> String
+pub fn Hsv::to_hsl(Self) -> Hsl
+pub fn Hsv::to_rgb(Self) -> Rgb
 
 #derive(Eq, @debug.Debug)
 pub(all) enum Level {
@@ -45,13 +99,38 @@ pub(all) enum Level {
 }
 
 #derive(Eq, @debug.Debug)
+pub(all) enum MixSpace {
+  Srgb
+  LinearRgb
+}
+
+#derive(Eq, @debug.Debug)
 pub struct Rgb {
   // private fields
 }
+pub fn Rgb::adjust_lightness(Self, Double) -> Result[Self, ColorError]
+pub fn Rgb::adjust_saturation(Self, Double) -> Result[Self, ColorError]
+pub fn Rgb::analogous(Self, Double) -> Result[Array[Self], ColorError]
 pub fn Rgb::channels(Self) -> (Int32, Int32, Int32)
+pub fn Rgb::complement(Self) -> Self
 pub fn Rgb::relative_luminance(Self) -> Double
+pub fn Rgb::rotate_hue(Self, Double) -> Result[Self, ColorError]
+pub fn Rgb::shade(Self, Double) -> Result[Self, ColorError]
+pub fn Rgb::tint(Self, Double) -> Result[Self, ColorError]
 pub fn Rgb::to_hex(Self) -> String
 pub fn Rgb::to_hsl(Self) -> Hsl
+pub fn Rgb::to_hsv(Self) -> Hsv
+pub fn Rgb::triadic(Self) -> Array[Self]
+pub fn Rgb::with_alpha(Self, Double) -> Result[Rgba, ColorError]
+
+#derive(Eq, @debug.Debug)
+pub struct Rgba {
+  // private fields
+}
+pub fn Rgba::components(Self) -> (Int32, Int32, Int32, Double)
+pub fn Rgba::flatten(Self, Rgb) -> Rgb
+pub fn Rgba::over(Self, Self) -> Self
+pub fn Rgba::to_hex(Self) -> String
 
 #derive(Eq, @debug.Debug)
 pub(all) enum TextSize {

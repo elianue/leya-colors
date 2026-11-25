@@ -140,7 +140,7 @@ moon run cmd/main
 moon info
 ```
 
-The library currently has **17 tests** per backend. Tests cover standard colors, malformed strings, non-finite values, all six HSL sectors, grayscale, numerical fixtures, 1,000 RGB/HSL/HEX round trips, another 1,000-color validation grid, and contrast invariants over all 256 gray levels. WCAG tests cover adjacent 8-bit grays on both sides of 3, 4.5 and 7, plus exact inclusive thresholds and epsilon neighbors. The separate consumer adds 2 integration tests (19 in its workspace). See [development results](docs/DEVELOPMENT.md).
+The library currently has **26 tests** per backend. Tests cover standard colors, malformed strings, non-finite values, all six HSL sectors, grayscale, numerical fixtures, 1,000 RGB/HSL/HEX round trips, another 1,000-color validation grid, and contrast invariants over all 256 gray levels. WCAG tests cover adjacent 8-bit grays on both sides of 3, 4.5 and 7, plus exact inclusive thresholds and epsilon neighbors. The separate consumer adds 2 integration tests (28 in its workspace). See [development results](docs/DEVELOPMENT.md).
 
 GitHub Actions runs formatting, checking, Wasm/JavaScript tests, build, and both runnable examples on Ubuntu and Windows for pushes and pull requests. Third-party actions are pinned to commit hashes. The MoonBit channel is `latest` so the CI log records the actual installed versions; the compiler itself is not pinned, and a future language change can require maintenance. There are no publication credentials or deployment steps in CI.
 
@@ -155,8 +155,38 @@ GitHub Actions runs formatting, checking, Wasm/JavaScript tests, build, and both
 
 An independent implementation of standard formulas, not a source-code port. Related projects inspected: [color-convert](https://github.com/Qix-/color-convert), [MoonBit Palette Forge](https://github.com/lkdrt/moonbit-palette-forge), and [office.mbt](https://github.com/moonbitlang/office.mbt). See [research notes](docs/RESEARCH.md).
 
-Alpha blending, CSS color parsing, perceptual color spaces, palette generation and a visual UI are outside this MVP. No competition application is included.
+CSS functional parsing/names, perceptual color spaces and a visual UI remain outside this library. No competition application is included.
 
 ## License
 
 [MIT](LICENSE).
+
+## Expanded color toolkit (main branch)
+
+The checkout now includes HSV conversion, RGBA hex parsing and source-over
+composition, sRGB/linear-light mixing, gradients, harmony palettes, contrast
+selection and multi-stop gradients. These additions are available in the repository and are
+not part of the previously published 0.1.0 package until a new release is made.
+
+- `hsv(h,s,v)`, `Rgb::to_hsv`, `Hsv::to_rgb/to_hsl/to_hex`, `Hsl::to_hsv`.
+- `rgba(r,g,b,a)`, `Rgb::with_alpha`, `from_hex_alpha`, `Rgba::over/flatten/to_hex/components`, `alpha_contrast`.
+- `mix(a,b,amount,space)`, `gradient(a,b,count,space)` with `Srgb` or `LinearRgb`.
+- `Rgb::tint/shade/rotate_hue/complement/triadic/analogous/adjust_saturation/adjust_lightness`.
+- `best_foreground`, `readable_foregrounds`, `audit_palette`.
+- `color_stop`, `sample_stops`, `gradient_stops`, `suggest_foreground`.
+
+Additional errors are `InvalidHsv`, `InvalidAlpha`, `InvalidAmount`, and
+`InvalidCount`. HSV uses degrees and percentages; alpha and mix amounts use
+0..1. NaN/infinities are rejected. Gradient counts are 1..4096; a singleton
+contains the start color. Audits and multi-stop gradients accept at most 256
+entries. Stops must be strictly ordered with endpoints at 0 and 1.
+Alpha hex uses RGBA/RRGGBBAA; the original `from_hex` remains RGB-only.
+Composition uses encoded sRGB and rounds each result to 8-bit channels.
+`suggest_foreground` returns the best black/white fallback if a requested
+contrast cannot be reached; always check the returned color with
+`passes_contrast`. It does not minimize perceptual distance.
+
+See [resubmission evidence and source counts](docs/RESUBMISSION.md).
+Run `powershell -File scripts/count-source.ps1` to reproduce the core source
+count: 671 code lines, or 527 after also excluding delimiter-only lines.
+Both counts exclude tests, examples, generated interfaces and comments.

@@ -23,6 +23,10 @@ pub(all) enum ColorError {
   InvalidRgb
   InvalidHsl
   InvalidHex
+  InvalidHsv
+  InvalidAlpha
+  InvalidAmount
+  InvalidCount
 }
 
 ///|
