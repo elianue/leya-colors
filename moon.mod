@@ -1,11 +1,11 @@
 name = "elianue/leya-colors"
 
-version = "0.1.0"
+version = "0.2.0"
 
 license = "MIT"
 
 repository = "https://github.com/elianue/leya-colors"
 
-description = "Validated sRGB and HSL conversion with WCAG contrast utilities"
+description = "Validated RGB/HSL/HSV, alpha composition, gradients and measured contrast suggestions"
 
 readme = "README.md"

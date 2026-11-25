@@ -44,6 +44,8 @@ pub fn rgba(Int32, Int32, Int32, Double) -> Result[Rgba, ColorError]
 
 pub fn sample_stops(Array[ColorStop], Double, MixSpace) -> Result[Rgb, ColorError]
 
+pub fn suggest_contrast(Rgb, Rgb, Level, TextSize) -> ContrastSuggestion
+
 pub fn suggest_foreground(Rgb, Rgb, Level, TextSize) -> Rgb
 
 // Errors
@@ -72,6 +74,15 @@ pub struct ContrastPair {
   second : Int32
   ratio : Double
   passes : Bool
+}
+
+#derive(Eq, @debug.Debug)
+pub struct ContrastSuggestion {
+  color : Rgb
+  ratio : Double
+  required : Double
+  passes : Bool
+  changed : Bool
 }
 
 #derive(Eq, @debug.Debug)

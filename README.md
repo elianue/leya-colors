@@ -4,7 +4,7 @@
 
 A lightweight color utility library written in **MoonBit**: validated opaque sRGB colors, HEX/RGB/HSL conversion, relative luminance, and WCAG text contrast checks. No third-party dependencies beyond MoonBit core.
 
-Working MVP, version 0.1.0. Created and maintained by Leya (`elianue`), with AI-assisted development. The original planning README is preserved in [docs/README.original.md](docs/README.original.md).
+Working MVP, version 0.2.0. Created and maintained by Leya (`elianue`), with AI-assisted development. The original planning README is preserved in [docs/README.original.md](docs/README.original.md).
 
 ## Quick start
 
@@ -25,7 +25,7 @@ The runnable example prints `#336699`, RGB `(51, 102, 153)`, HSL approximately `
 In an existing MoonBit module, add the released library:
 
 ```sh
-moon add elianue/leya-colors@0.1.0
+moon add elianue/leya-colors@0.2.0
 ```
 
 Import the package in the consuming `moon.pkg`:
@@ -50,7 +50,7 @@ Add this dependency to `my-app/moon.mod` (the workspace resolves the local sourc
 
 ```moonbit
 import {
-  "elianue/leya-colors@0.1.0",
+  "elianue/leya-colors@0.2.0",
 }
 ```
 
@@ -140,7 +140,7 @@ moon run cmd/main
 moon info
 ```
 
-The library currently has **26 tests** per backend. Tests cover standard colors, malformed strings, non-finite values, all six HSL sectors, grayscale, numerical fixtures, 1,000 RGB/HSL/HEX round trips, another 1,000-color validation grid, and contrast invariants over all 256 gray levels. WCAG tests cover adjacent 8-bit grays on both sides of 3, 4.5 and 7, plus exact inclusive thresholds and epsilon neighbors. The separate consumer adds 2 integration tests (28 in its workspace). See [development results](docs/DEVELOPMENT.md).
+The library currently has **30 tests** per backend. Tests cover standard colors, malformed strings, non-finite values, all six HSL sectors, grayscale, numerical fixtures, 1,000 RGB/HSL/HEX round trips, another 1,000-color validation grid, and contrast invariants over all 256 gray levels. WCAG tests cover adjacent 8-bit grays on both sides of 3, 4.5 and 7, plus exact inclusive thresholds and epsilon neighbors. The separate consumer adds 2 integration tests (32 in its workspace). See [development results](docs/DEVELOPMENT.md).
 
 GitHub Actions runs formatting, checking, Wasm/JavaScript tests, build, and both runnable examples on Ubuntu and Windows for pushes and pull requests. Third-party actions are pinned to commit hashes. The MoonBit channel is `latest` so the CI log records the actual installed versions; the compiler itself is not pinned, and a future language change can require maintenance. There are no publication credentials or deployment steps in CI.
 
@@ -165,8 +165,7 @@ CSS functional parsing/names, perceptual color spaces and a visual UI remain out
 
 The checkout now includes HSV conversion, RGBA hex parsing and source-over
 composition, sRGB/linear-light mixing, gradients, harmony palettes, contrast
-selection and multi-stop gradients. These additions are available in the repository and are
-not part of the previously published 0.1.0 package until a new release is made.
+selection and multi-stop gradients. These additions are included in version 0.2.0.
 
 - `hsv(h,s,v)`, `Rgb::to_hsv`, `Hsv::to_rgb/to_hsl/to_hex`, `Hsl::to_hsv`.
 - `rgba(r,g,b,a)`, `Rgb::with_alpha`, `from_hex_alpha`, `Rgba::over/flatten/to_hex/components`, `alpha_contrast`.
@@ -188,5 +187,18 @@ contrast cannot be reached; always check the returned color with
 
 See [resubmission evidence and source counts](docs/RESUBMISSION.md).
 Run `powershell -File scripts/count-source.ps1` to reproduce the core source
-count: 671 code lines, or 527 after also excluding delimiter-only lines.
+count: 696 code lines, or 548 after also excluding delimiter-only lines.
 Both counts exclude tests, examples, generated interfaces and comments.
+
+## Check a real design-token workflow
+
+Run `moon run cmd/audit` to parse named UI tokens, measure contrast, suggest
+corrections and report unreachable targets. For AA normal text on white,
+`#777777` (4.478:1) becomes `#767676` (4.542:1); `#336699` is preserved.
+Malformed input is reported and skipped. AAA normal text on `#777777`
+reports failure explicitly.
+
+Prefer `suggest_contrast(original, background, level, size)` for new callers.
+Its `ContrastSuggestion` exposes `color`, `ratio`, `required`, `passes`, and
+`changed`. The original `suggest_foreground` remains available for compatibility.
+See [scope, ecosystem comparison and independent validation](docs/POSITIONING.md).

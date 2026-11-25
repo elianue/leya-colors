@@ -31,6 +31,8 @@ jobs:
       - run: moon test --target js
       - run: moon build
       - run: moon run cmd/main
+      - name: Design token audit workflow
+        run: moon run cmd/audit
       - name: Consumer formatting
         working-directory: examples/consumer
         run: moon fmt --check
