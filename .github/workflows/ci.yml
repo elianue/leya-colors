@@ -33,6 +33,12 @@ jobs:
       - run: moon run cmd/main
       - name: Design token audit workflow
         run: moon run cmd/audit
+      - name: Shared text token workflow
+        run: moon run cmd/shared-token
+      - name: Pinned same-task Palette Forge comparison
+        if: runner.os == 'Linux'
+        shell: bash
+        run: bash scripts/compare-palette-forge.sh
       - name: Consumer formatting
         working-directory: examples/consumer
         run: moon fmt --check

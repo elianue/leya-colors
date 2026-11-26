@@ -158,7 +158,7 @@ moon run cmd/main
 moon info
 ```
 
-The library currently has **30 tests** per backend. Tests cover standard colors, malformed strings, non-finite values, all six HSL sectors, grayscale, numerical fixtures, 1,000 RGB/HSL/HEX round trips, another 1,000-color validation grid, and contrast invariants over all 256 gray levels. WCAG tests cover adjacent 8-bit grays on both sides of 3, 4.5 and 7, plus exact inclusive thresholds and epsilon neighbors. The separate consumer adds 2 integration tests (32 in its workspace). See [development results](docs/DEVELOPMENT.md).
+The library currently has **34 tests** per backend. Tests cover standard colors, malformed strings, non-finite values, all six HSL sectors, grayscale, numerical fixtures, 1,000 RGB/HSL/HEX round trips, another 1,000-color validation grid, and contrast invariants over all 256 gray levels. WCAG tests cover adjacent 8-bit grays on both sides of 3, 4.5 and 7, plus exact inclusive thresholds and epsilon neighbors. The separate consumer adds 2 integration tests (36 in its workspace). See [development results](docs/DEVELOPMENT.md).
 
 GitHub Actions runs formatting, checking, Wasm/JavaScript tests, build, and both runnable examples on Ubuntu and Windows for pushes and pull requests. Third-party actions are pinned to commit hashes. The MoonBit channel is `latest` so the CI log records the actual installed versions; the compiler itself is not pinned, and a future language change can require maintenance. There are no publication credentials or deployment steps in CI.
 
@@ -205,7 +205,7 @@ contrast cannot be reached; always check the returned color with
 
 See [resubmission evidence and source counts](docs/RESUBMISSION.md).
 Run `powershell -File scripts/count-source.ps1` to reproduce the core source
-count: 696 code lines, or 548 after also excluding delimiter-only lines.
+count: 759 code lines, or 598 after also excluding delimiter-only lines.
 Both counts exclude tests, examples, generated interfaces and comments.
 
 ## Check a real design-token workflow

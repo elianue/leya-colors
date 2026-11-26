@@ -10,10 +10,29 @@ to an ordered list: current gray `#777777`, approved gray `#767676`, and
 approved plum `#6B5163`. Both states require WCAG AA normal-text contrast
 of at least 4.5:1.
 
+### Why one token across both states?
+
+This reference component has a shared `card.caption.foreground` token; selection
+changes `card.background` and adds a selected marker, while caption text keeps
+its identity. A background-only state change is a common component contract;
+checking the foreground only on the default background misses its selected use.
+The handoff deliberately treats the foreground token as one approved value,
+so the release check must quantify over both uses rather than repair each pair
+independently. A designer is free to change that contract and introduce a
+separate selected-state foreground; this library does not prohibit that design.
+
+In this illustrative handoff the preference is: retain the existing neutral,
+then use its approved neutral adjustment, then use the approved plum accent.
+The list represents an explicit design input, not a palette invented by the
+checker. The exact colors are fixtures, not evidence of a customer's approval.
+There is no claim of a deployed consumer or external user study. The concrete
+deliverable is an executable component contract with per-use failure evidence.
+
 | Operation on the same card | HEX actually checked | White | Pink | Workflow result |
 | --- | --- | ---: | ---: | --- |
 | Existing caption | `#777777` | 4.478 | 3.807 | Fails both |
 | Approved neutral | `#767676` | 4.542 | 3.862 | Passes only on white |
+| Palette Forge measurements plus the same approved-candidate selection policy | `#6B5163` | 7.042 | 5.986 | Same choice as Leya Colors |
 | Palette Forge's single-background fix called with white | `#777777` | 4.478 | 3.807 | Recheck the emitted HEX; it does not pass in this run |
 | Palette Forge's single-background fix called with pink | `#6B6B6B` | 5.329 | 4.531 | Passes both, but is outside this approved list |
 | Leya Colors' first approved candidate passing both states | `#6B5163` | 7.042 | 5.986 | Use the same color for both cards |
@@ -37,6 +56,14 @@ the full set of measurements even when no approved color passes. The
 claim is about this workflow, not unique contrast mathematics, greater
 accuracy in general, or a performance advantage.
 
+The comparison includes an independent loop over the same approved candidates
+using Palette Forge's `check_wcag`, not Leya's contrast function. It checks all
+candidate/surface ratios and decisions against Leya and asserts that both
+policies select plum. Thus the result demonstrates policy packaging and HEX
+interoperability, not an inability of Palette Forge to solve this task. The
+single-background correction rows are a separate workflow illustration, not
+the baseline for claiming a superior multi-background algorithm.
+
 Run from the repository root:
 
 ```sh
@@ -48,7 +75,10 @@ The second command fetches Palette Forge at
 [`4ac93f2`](https://github.com/lkdrt/moonbit-palette-forge/tree/4ac93f263658d0dad50b673f2d09f6811bbf4486)
 into a temporary workspace. It needs Bash, Git, network access and MoonBit
 (tested with `moon 0.1.20261119`). The example compares that revision's
-public `fix_contrast` facade, not every possible Palette Forge workflow.
+public `fix_contrast` facade and a same-task policy implemented with its
+`check_wcag` measurements. It does not compare every possible upstream workflow.
+The program exits unsuccessfully if the pinned correction HEX values, cross-library
+measurements, pass/fail decisions or selected token diverge. CI runs it on Ubuntu.
 The package tests also cover a no-match handoff, an empty handoff,
 different text-size rules, and deterministic candidate preference.
 The check is for solid, opaque text/background colors and is not a full
