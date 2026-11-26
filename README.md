@@ -4,7 +4,25 @@
 
 A lightweight color utility library written in **MoonBit**: validated opaque sRGB colors, HEX/RGB/HSL conversion, relative luminance, and WCAG text contrast checks. No third-party dependencies beyond MoonBit core.
 
-Working MVP, version 0.2.0. Created and maintained by Leya (`elianue`), with AI-assisted development. The original planning README is preserved in [docs/README.original.md](docs/README.original.md).
+Latest registry release: 0.2.0. The GitHub checkout also includes the unreleased shared-token check below. Created and maintained by Leya (`elianue`), with AI-assisted development. The original planning README is preserved in [docs/README.original.md](docs/README.original.md).
+
+## A real UI decision: one caption color for two card states
+
+When a card flips from a white background to a pink selected state, checking
+the caption only on white can let unreadable text ship. Leya Colors checks
+the **same** text color on every specified background and selects the first
+passing color from the designer-approved list. If none passes, it reports
+which uses failed instead of making up a new color.
+
+```sh
+moon run cmd/shared-token
+```
+
+For this example, `#767676` passes on white (4.54:1) but fails on pink
+(3.86:1). The approved plum `#6B5163` passes both (7.04:1 and 5.99:1).
+[Same-scenario comparison with Palette Forge](docs/POSITIONING.md#same-scenario-comparison)
+shows how to reuse its color output and where Leya Colors adds a
+multi-state, approved-palette release check.
 
 ## Quick start
 

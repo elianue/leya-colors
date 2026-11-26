@@ -1,24 +1,60 @@
 # Scope and ecosystem comparison
 
-Reviewed 2026-11-25 against the related project's public README. This is a
-feature-scope comparison, not a performance benchmark or an implementation audit.
+## Same-scenario comparison
 
-| Need | Leya Colors | Palette Forge (documented scope) |
-| --- | --- | --- |
-| RGB/HSL/HSV and validated inputs | Supported | Supported |
-| Text contrast and remediation | WCAG ratios and discrete black/white-path search | WCAG/APCA audits and remediation |
-| Perceptual color spaces | Not supported | Lab, OkLab, OkLCH and others |
-| Semantic themes and export formats | Not supported | Themes, aliases and multiple export formats |
-| Focus | Small single-package color API and reproducible token-check example | Broad design-system color engine |
+**Scenario:** a record-collection UI uses one small caption color for both the
+default album card (white, `#FFFFFF`) and its selected state (blush pink,
+`#FDE7EF`). This is a runnable reference case, not a claim that another
+website has already deployed it. The design handoff limits the text color
+to an ordered list: current gray `#777777`, approved gray `#767676`, and
+approved plum `#6B5163`. Both states require WCAG AA normal-text contrast
+of at least 4.5:1.
 
-Source: [Palette Forge README](https://github.com/lkdrt/moonbit-palette-forge).
-The comparison confirms overlap; Leya Colors does not claim that color
-conversion, validation or accessibility auditing are new ecosystem capabilities.
-Choose it when a small API with explicit numeric contracts is sufficient.
-Evaluate Palette Forge when perceptual interpolation, themes or export formats
-are needed. No speed or memory advantage has been measured here.
+| Operation on the same card | HEX actually checked | White | Pink | Workflow result |
+| --- | --- | ---: | ---: | --- |
+| Existing caption | `#777777` | 4.478 | 3.807 | Fails both |
+| Approved neutral | `#767676` | 4.542 | 3.862 | Passes only on white |
+| Palette Forge's single-background fix called with white | `#777777` | 4.478 | 3.807 | Recheck the emitted HEX; it does not pass in this run |
+| Palette Forge's single-background fix called with pink | `#6B6B6B` | 5.329 | 4.531 | Passes both, but is outside this approved list |
+| Leya Colors' first approved candidate passing both states | `#6B5163` | 7.042 | 5.986 | Use the same color for both cards |
 
-## Reproducible use case
+Ratios are displayed to three decimals here; neither decision uses rounded
+ratios. The example measures the Palette Forge colors *after* serializing
+to HEX, because that is what the UI would ship.
+
+### What is reused, and what is different?
+
+[Palette Forge](https://github.com/lkdrt/moonbit-palette-forge) already
+covers color conversions, palette and theme generation, and WCAG/APCA
+audits. It can supply the palette and background colors. The runnable
+comparison takes the same inputs and passes Palette Forge color values to
+Leya Colors as HEX, with no integration dependency in the core package.
+A developer could implement the same selection policy using Palette Forge's
+pairwise measurements. The distinction is the policy exposed directly by
+`select_shared_text_token`: preserve the caller's candidate preference,
+require **one** approved color to pass **every** declared use, and return
+the full set of measurements even when no approved color passes. The
+claim is about this workflow, not unique contrast mathematics, greater
+accuracy in general, or a performance advantage.
+
+Run from the repository root:
+
+```sh
+moon run cmd/shared-token
+bash scripts/compare-palette-forge.sh
+```
+
+The second command fetches Palette Forge at
+[`4ac93f2`](https://github.com/lkdrt/moonbit-palette-forge/tree/4ac93f263658d0dad50b673f2d09f6811bbf4486)
+into a temporary workspace. It needs Bash, Git, network access and MoonBit
+(tested with `moon 0.1.20261119`). The example compares that revision's
+public `fix_contrast` facade, not every possible Palette Forge workflow.
+The package tests also cover a no-match handoff, an empty handoff,
+different text-size rules, and deterministic candidate preference.
+The check is for solid, opaque text/background colors and is not a full
+WCAG conformance audit.
+
+## Earlier single-background example
 
 Run `moon run cmd/audit`. The example checks named UI tokens against white:
 

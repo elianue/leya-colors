@@ -44,6 +44,8 @@ pub fn rgba(Int32, Int32, Int32, Double) -> Result[Rgba, ColorError]
 
 pub fn sample_stops(Array[ColorStop], Double, MixSpace) -> Result[Rgb, ColorError]
 
+pub fn select_shared_text_token(Array[TokenCandidate], Array[TokenSurface]) -> SharedTokenResult
+
 pub fn suggest_contrast(Rgb, Rgb, Level, TextSize) -> ContrastSuggestion
 
 pub fn suggest_foreground(Rgb, Rgb, Level, TextSize) -> Rgb
@@ -143,10 +145,47 @@ pub fn Rgba::flatten(Self, Rgb) -> Rgb
 pub fn Rgba::over(Self, Self) -> Self
 pub fn Rgba::to_hex(Self) -> String
 
+pub(all) struct SharedTokenResult {
+  status : SharedTokenStatus
+  candidates : Array[TokenCandidateCheck]
+}
+
+pub(all) enum SharedTokenStatus {
+  MissingSurfaces
+  MissingCandidates
+  NoApprovedMatch
+  Selected(Int32)
+}
+
 #derive(Eq, @debug.Debug)
 pub(all) enum TextSize {
   Normal
   Large
+}
+
+pub(all) struct TokenCandidate {
+  name : String
+  color : Rgb
+}
+
+pub(all) struct TokenCandidateCheck {
+  candidate : TokenCandidate
+  checks : Array[TokenSurfaceCheck]
+  passes : Bool
+}
+
+pub(all) struct TokenSurface {
+  name : String
+  background : Rgb
+  level : Level
+  size : TextSize
+}
+
+pub(all) struct TokenSurfaceCheck {
+  surface : String
+  ratio : Double
+  required : Double
+  passes : Bool
 }
 
 // Type aliases

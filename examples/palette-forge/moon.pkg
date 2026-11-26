@@ -1,0 +1,7 @@
+import {
+  "elianue/leya-colors" @leya,
+  "lkdrt/palette_forge/src/core" @forge_core,
+  "lkdrt/palette_forge/src/lib" @forge,
+}
+
+pkgtype(kind: "executable")

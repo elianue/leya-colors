@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Select one approved text token across multiple backgrounds, retaining
+  per-surface evidence even when no candidate passes.
+- Add a runnable shared-token demo and a same-scenario comparison that
+  exchanges HEX colors with a pinned Palette Forge revision.
+
 ## 0.2.0
 
 - Add HSV conversion, RGBA parsing/composition, mixing and palette helpers.

@@ -1,0 +1,5 @@
+import {
+  "elianue/leya-colors" @colors,
+}
+
+pkgtype(kind: "executable")
